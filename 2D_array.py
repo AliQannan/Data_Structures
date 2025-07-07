@@ -1,41 +1,68 @@
-class TwoDArray:
-    def __init__(self, rows, cols):
-        self.rows = rows
-        self.cols = cols
-        self.array = [[None for _ in range(cols)] for _ in range(rows)]
+import ctypes
+class DynamicArray : 
+    def __init__(self): 
+        self._n =0 
+        self._capacity =1
+        self._arr = self._make_array(self._capacity)
 
-    def set(self, row, col, value):
-        """وضع قيمة في موقع معين"""
-        if 0 <= row < self.rows and 0 <= col < self.cols:
-            self.array[row][col] = value
-        else:
-            raise IndexError("Row or Column out of bounds")
+    """create darray"""
+    def _make_array(self, c) : 
+        return (c* ctypes.py_object)()
+    """add values """
+    def append(self , obj:object)->None: 
+        if self._n == self._capacity: 
+            self.resize(2*self._capacity)
+        self._arr[self._n] = obj
+        self._n +=1
+    """resize my array"""
+    def resize(self, c) : 
+        B = self._make_array(c) 
+        for k in range(self._n): 
+            B[k] = self._arr[k]
+        self._arr = B 
+        self._capacity =c 
+    """delete spacific value"""
+    def delete (self ,index :int)->None: 
+        if not 0 <= index < self._n : 
+            raise IndexError ('invalid index')
+        for k in range(index ,self._n-1 ) : 
+            self._arr[k] = self._arr[k+1]
+        self._arr[self._n -1] = None
+        self._n -=1
+        """search or find value"""
+    def search (self, value) : 
+        for k in range(self._n) : 
+            if self._arr[k] == value :
+                return k
+        return -1 
+    """size of array"""
+    def __len__ (self) : 
+        return self._n 
+    """set item"""
+    def  __setitem__(self , index ,value) : 
+        if not 0 <= index < self._n : 
+            raise IndexError
+        self._arr[index ] =value
+    """get item"""
+    def __getitem__ (self, index) : 
+        if not 0 <= index < self._n : 
+            raise IndexError ("invalid index" )
+        return self._arr[index]
+    """display entier object"""
+    def __str__ (self) : 
+        return str([self._arr[k] for k in range(self._n)])
+     
 
-    def get(self, row, col):
-        """الوصول إلى عنصر"""
-        if 0 <= row < self.rows and 0 <= col < self.cols:
-            return self.array[row][col]
-        else:
-            raise IndexError("Row or Column out of bounds")
-
-    def search(self, target):
-        """البحث عن قيمة عبر الصفوف والأعمدة"""
-        for r in range(self.rows):
-            for c in range(self.cols):
-                if self.array[r][c] == target:
-                    return (r, c)
-        return (-1, -1)
-
-    def display(self):
-        """عرض المصفوفة"""
-        for row in self.array:
-            print(row)
 
 
-# === استخدام الكلاس ===
-tda = TwoDArray(3, 3)
-tda.set(0, 0, 1)
-tda.set(1, 1, 2)
-tda.set(2, 2, 3)
-tda.display()
-print("Search 2 at position:", tda.search(2))
+
+array = DynamicArray() 
+array.append(1)
+array.append([1,2,3,34,23,4,234])
+print(array)
+print(len(array))
+print(array[1])
+
+array[1] = 'array'
+print(array)
+
